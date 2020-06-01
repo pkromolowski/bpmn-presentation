@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="Definitions_0w8sw9o" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="3.5.0">
+  <decision id="zmienna_x" name="Decision 1">
+    <extensionElements>
+      <biodi:bounds x="156" y="81" width="180" height="80" />
+    </extensionElements>
+    <decisionTable id="decisionTable_1" hitPolicy="FIRST">
+      <input id="input_1" label="X" camunda:inputVariable="x">
+        <inputExpression id="inputExpression_1" typeRef="integer">
+          <text></text>
+        </inputExpression>
+      </input>
+      <output id="output_1" label="Result" name="result" typeRef="string" />
+      <output id="OutputClause_0srhdou" label="Result2" name="result2" typeRef="integer" />
+      <rule id="DecisionRule_1qdpkfo">
+        <inputEntry id="UnaryTests_00ty1is">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0v2lsa1">
+          <text>"jeden"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0e6mfaa">
+          <text>1</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1rkvzo7">
+        <inputEntry id="UnaryTests_0iqp0tn">
+          <text>&gt; 1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1dy1nzh">
+          <text>"więcej niż jeden"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_142sckm">
+          <text>2</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1lebnt7">
+        <inputEntry id="UnaryTests_0pcspso">
+          <text>&lt; 15</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0m8qqi7">
+          <text>"mniej niż 15"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_02ftry4">
+          <text>3</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>

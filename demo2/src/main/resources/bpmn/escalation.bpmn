@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0gvytf6" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.5.0">
+  <bpmn:process id="escalation-demo" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>SequenceFlow_1kc0bjl</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="EndEvent_1vtmwx1">
+      <bpmn:incoming>SequenceFlow_1fogoju</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1kc0bjl" sourceRef="StartEvent_1" targetRef="IntermediateThrowEvent_09vjnvm" />
+    <bpmn:subProcess id="SubProcess_152ldbk" triggeredByEvent="true">
+      <bpmn:endEvent id="EndEvent_1szddpw">
+        <bpmn:incoming>SequenceFlow_1jol5wt</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="SequenceFlow_1jol5wt" sourceRef="Task_04bxx71" targetRef="EndEvent_1szddpw" />
+      <bpmn:sequenceFlow id="SequenceFlow_1vpf2pe" sourceRef="StartEvent_130nou9" targetRef="Task_04bxx71" />
+      <bpmn:serviceTask id="Task_04bxx71" name="Po eskalacji" camunda:modelerTemplate="com.example.demo2.bpmn.delegates.ServiceTaskDelegate" camunda:class="com.example.demo2.bpmn.delegates.ServiceTaskDelegate">
+        <bpmn:extensionElements />
+        <bpmn:incoming>SequenceFlow_1vpf2pe</bpmn:incoming>
+        <bpmn:outgoing>SequenceFlow_1jol5wt</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:startEvent id="StartEvent_130nou9" camunda:asyncBefore="true" isInterrupting="false">
+        <bpmn:outgoing>SequenceFlow_1vpf2pe</bpmn:outgoing>
+        <bpmn:escalationEventDefinition id="EscalationEventDefinition_09smioo" escalationRef="Escalation_04i2vct" />
+      </bpmn:startEvent>
+    </bpmn:subProcess>
+    <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_09vjnvm">
+      <bpmn:incoming>SequenceFlow_1kc0bjl</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0u4tenb</bpmn:outgoing>
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_1kif3hd" escalationRef="Escalation_04i2vct" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0u4tenb" sourceRef="IntermediateThrowEvent_09vjnvm" targetRef="Task_0ugnz70" />
+    <bpmn:scriptTask id="Task_0ugnz70" name="Script 1" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_0u4tenb</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1qh7lw0</bpmn:outgoing>
+      <bpmn:script>execution.setVariable("x", 36);</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1qh7lw0" sourceRef="Task_0ugnz70" targetRef="Task_06xk9wq" />
+    <bpmn:serviceTask id="Task_06xk9wq" name="Service task 1" camunda:modelerTemplate="com.example.demo2.bpmn.delegates.ServiceTaskDelegate" camunda:class="com.example.demo2.bpmn.delegates.ServiceTaskDelegate">
+      <bpmn:extensionElements />
+      <bpmn:incoming>SequenceFlow_1qh7lw0</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1fogoju</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1fogoju" sourceRef="Task_06xk9wq" targetRef="EndEvent_1vtmwx1" />
+    <bpmn:subProcess id="SubProcess_02cc606" camunda:asyncBefore="true" triggeredByEvent="true">
+      <bpmn:startEvent id="StartEvent_1usczhc" isInterrupting="false">
+        <bpmn:outgoing>SequenceFlow_0101lnp</bpmn:outgoing>
+        <bpmn:conditionalEventDefinition id="ConditionalEventDefinition_08hj0n0" camunda:variableName="x" camunda:variableEvent="create,update">
+          <bpmn:condition xsi:type="bpmn:tFormalExpression">${x != null}</bpmn:condition>
+        </bpmn:conditionalEventDefinition>
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="SequenceFlow_0101lnp" sourceRef="StartEvent_1usczhc" targetRef="Task_0510jaa" />
+      <bpmn:endEvent id="EndEvent_0mvq9y9">
+        <bpmn:incoming>SequenceFlow_0bz4eay</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="SequenceFlow_0bz4eay" sourceRef="Task_0510jaa" targetRef="EndEvent_0mvq9y9" />
+      <bpmn:serviceTask id="Task_0510jaa" name="Zmiana X" camunda:modelerTemplate="com.example.demo2.bpmn.delegates.ServiceTaskDelegate" camunda:class="com.example.demo2.bpmn.delegates.ServiceTaskDelegate">
+        <bpmn:extensionElements />
+        <bpmn:incoming>SequenceFlow_0101lnp</bpmn:incoming>
+        <bpmn:outgoing>SequenceFlow_0bz4eay</bpmn:outgoing>
+      </bpmn:serviceTask>
+    </bpmn:subProcess>
+  </bpmn:process>
+  <bpmn:escalation id="Escalation_04i2vct" name="Escalation_1eoi2oi" escalationCode="test-escalation" />
+  <bpmn:signal id="Signal_1n6gi41" name="Signal_2nm2g56" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="escalation-demo">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="142" y="82" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1vtmwx1_di" bpmnElement="EndEvent_1vtmwx1">
+        <dc:Bounds x="802" y="82" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1kc0bjl_di" bpmnElement="SequenceFlow_1kc0bjl">
+        <di:waypoint x="178" y="100" />
+        <di:waypoint x="332" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_1szddpw_di" bpmnElement="EndEvent_1szddpw">
+        <dc:Bounds x="432" y="312" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1jol5wt_di" bpmnElement="SequenceFlow_1jol5wt">
+        <di:waypoint x="370" y="330" />
+        <di:waypoint x="432" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="SubProcess_0tt5q4c_di" bpmnElement="SubProcess_152ldbk" isExpanded="true">
+        <dc:Bounds x="140" y="230" width="370" height="180" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1vpf2pe_di" bpmnElement="SequenceFlow_1vpf2pe">
+        <di:waypoint x="216" y="330" />
+        <di:waypoint x="270" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0y9v9i5_di" bpmnElement="Task_04bxx71">
+        <dc:Bounds x="270" y="290" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="IntermediateThrowEvent_0iw5etn_di" bpmnElement="IntermediateThrowEvent_09vjnvm">
+        <dc:Bounds x="332" y="82" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0u4tenb_di" bpmnElement="SequenceFlow_0u4tenb">
+        <di:waypoint x="368" y="100" />
+        <di:waypoint x="450" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_04bdhiq_di" bpmnElement="Task_0ugnz70">
+        <dc:Bounds x="450" y="60" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1qh7lw0_di" bpmnElement="SequenceFlow_1qh7lw0">
+        <di:waypoint x="550" y="100" />
+        <di:waypoint x="600" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0an2gmj_di" bpmnElement="Task_06xk9wq">
+        <dc:Bounds x="600" y="60" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1fogoju_di" bpmnElement="SequenceFlow_1fogoju">
+        <di:waypoint x="700" y="100" />
+        <di:waypoint x="802" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="StartEvent_0nggq0p_di" bpmnElement="StartEvent_130nou9">
+        <dc:Bounds x="180" y="312" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_1gguoh9_di" bpmnElement="SubProcess_02cc606" isExpanded="true">
+        <dc:Bounds x="140" y="460" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1ikpvmy_di" bpmnElement="StartEvent_1usczhc">
+        <dc:Bounds x="180" y="542" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0101lnp_di" bpmnElement="SequenceFlow_0101lnp">
+        <di:waypoint x="216" y="560" />
+        <di:waypoint x="270" y="560" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_0mvq9y9_di" bpmnElement="EndEvent_0mvq9y9">
+        <dc:Bounds x="432" y="542" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0bz4eay_di" bpmnElement="SequenceFlow_0bz4eay">
+        <di:waypoint x="370" y="560" />
+        <di:waypoint x="432" y="560" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1udnvxn_di" bpmnElement="Task_0510jaa">
+        <dc:Bounds x="270" y="520" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
